@@ -11,4 +11,14 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 
-app.mount('#app')
+app.mount('#app').$nextTick(() => {
+  // Remove Preload scripts loading
+  postMessage({ payload: 'removeLoading' }, '*')
+
+  // Use contextBridge
+  // @ts-ignore
+  window.ipcRenderer.on('main-process-message', (_event, message) => {
+    console.log(message)
+  })
+})
+
